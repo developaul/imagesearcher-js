@@ -1,4 +1,5 @@
-import { form, result } from '../references.js';
+import { showPaginator } from '../functions.js';
+import { form, result, pagination, } from '../references.js';
 
 class UI {
     showError( message ) {
@@ -48,6 +49,12 @@ class UI {
         }
     }
 
+    cleanPagination() {
+        while( pagination.firstChild ) {
+            pagination.removeChild( pagination.firstChild );
+        }
+    }
+
     showImages( images ) {
         this.cleanResult();
 
@@ -72,10 +79,10 @@ class UI {
                 </div>`;
         });
 
-        
-
-
+        this.cleanPagination();
+        showPaginator();
     }
+
 }
 
 export default UI;
