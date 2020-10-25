@@ -1,10 +1,39 @@
-import { form, terminoInput, ui } from './references.js';
+import { form, terminoInput, ui, pagination } from './references.js';
 
 const registerPage = 40;
-export let totalPages, iterador, currentPage = 1;
+let totalPages, iterator, currentPage = 1;
 
 const startEventListener = () => {
     form.addEventListener( 'submit', validateForm );
+}
+
+function *createPaginator( total )  {
+    for( let i = 1; i <= total; i++ ) {
+        yield i;
+    }
+}
+
+
+const showPaginator = () => {
+    iterator = createPaginator( totalPages );
+
+    while( true ) {
+        const { value, done } = iterator.next();
+        if( done ) return;
+
+        const boton = document.createElement( 'a' );
+        boton.href = '#';
+        boton.dataset.pagina = value;
+        boton.textContent = value;
+        boton.classList.add( 'siguiente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'font-bold', 'mb-4', 'rounded' );
+
+        boton.onclick = () => {
+            currentPage = value;
+            searchImages();
+        }
+
+        pagination.appendChild( boton );
+    }
 }
 
 // Calcula la cantidad de páginas a generar
@@ -21,7 +50,7 @@ const searchImages = () => {
     fetch( url )
         .then( response => response.json() )
         .then( result => {
-            // totalPages = calculatePages( result.totalHits );
+            totalPages = calculatePages( result.totalHits );
             ui.showImages( result.hits );
         });
 }
@@ -41,5 +70,9 @@ const validateForm = event => {
 }
 
 export {
-    startEventListener
+    startEventListener,
+    createPaginator,
+    totalPages,
+    currentPage,
+    showPaginator
 }

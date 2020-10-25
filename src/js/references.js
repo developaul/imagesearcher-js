@@ -8,3 +8,5 @@ export const form           = document.querySelector( '#formulario' ),
 
 // Instances
 export const ui = new UI();
+
+export let iterator;
