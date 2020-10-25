@@ -3,7 +3,7 @@ import { form, terminoInput, ui, pagination } from './references.js';
 const registerPage = 40;
 let totalPages, iterator, currentPage = 1;
 
-const startEventListener = () => {
+function startEventListener() {
     form.addEventListener( 'submit', validateForm );
 }
 
