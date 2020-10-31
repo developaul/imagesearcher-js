@@ -40,19 +40,23 @@ const showPaginator = () => {
 const calculatePages = pages => Math.ceil( pages / registerPage );
 
 // Busca las imagenes de acuerdo al termino
-const searchImages = () => {
+const searchImages = async () => {
     ui.showSpinner();
 
     const termino = terminoInput.value;
     const key = '18852160-36a1004710f1f2896f7bfc714';
     const url = `https://pixabay.com/api/?key=${ key }&q=${ termino }&per_page=${ registerPage }&page=${ currentPage }`;
 
-    fetch( url )
-        .then( response => response.json() )
-        .then( result => {
-            totalPages = calculatePages( result.totalHits );
-            ui.showImages( result.hits );
-        });
+    try {
+        const response = await fetch( url );
+        const result = await response.json();
+
+        totalPages = calculatePages( result.totalHits );
+        ui.showImages( result.hits );
+    } catch( error ) {
+        ui.cleanResult();
+        ui.showError( 'No se pudo descargar las imagenes, Intente de nuevo' );
+    }
 }
 
 // Valida el formulario
